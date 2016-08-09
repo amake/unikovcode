@@ -41,7 +41,8 @@ class UnicodeGenerator(object):
         self._mdata = mdata
 
     def _gen_hex(self):
-        codepoint = '%04X' % randint(0, 0x10FFFF)
+        plane_max = choice([0xFFFF, 0x10FFFF])
+        codepoint = '%04X' % randint(0, plane_max)
         chars = list(codepoint)
         replace_at = randint(0, len(chars) - 1)
         chars[replace_at] = choice(non_hex_chars)  # for lulz
