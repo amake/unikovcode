@@ -72,9 +72,18 @@ def get_raw_data():
     return open(data_file)
 
 
+def get_names(record):
+    split = record.split(';')
+    character_name = split[1]
+    unicode10name = split[10]
+    result = [character_name]
+    if unicode10name:
+        result.append(unicode10name)
+    return result
+
 def get_codepoint_names():
     with get_raw_data() as in_data:
-        cp_names = [line.split(';')[1] for line in in_data]
+        cp_names = [name for line in in_data for name in get_names(line)]
     return [name for name in cp_names if not name.startswith('<')]
 
 
