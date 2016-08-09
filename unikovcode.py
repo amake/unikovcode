@@ -76,11 +76,21 @@ def get_codepoint_names():
     with get_raw_data() as in_data:
         cp_names = [line.split(';')[1] for line in in_data]
     return [name for name in cp_names if not name.startswith('<')]
-    
+
+
+generator = None
+
+
+def get_generator():
+    global generator
+    if generator is None:
+        data = MarkovData(get_codepoint_names(), order=5)
+        generator = UnicodeGenerator(data)
+    return generator
+
 
 def main():
-    data = MarkovData(get_codepoint_names(), order=5)
-    generator = UnicodeGenerator(data)
+    generator = get_generator()
     for _ in xrange(10):
         print(generator.generate())
 
