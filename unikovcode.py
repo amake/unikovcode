@@ -62,7 +62,7 @@ class UnicodeGenerator(object):
         return self._gen_desc() if result in self._mdata.raw_data else result
 
     def generate(self):
-        return 'U+%s %s' % (self._gen_hex(), self._gen_desc())
+        return u'\uFFFD U+%s %s' % (self._gen_hex(), self._gen_desc())
 
 
 def get_raw_data():
