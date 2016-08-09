@@ -18,19 +18,20 @@ def iterslice(items, size):
 
 class MarkovData(object):
     def __init__(self, raw_data, order=5):
+        self.raw_data = raw_data
         self.order = order
-        self.chains = self._train(raw_data)
-        self.seeds = self._get_seeds(raw_data)
+        self.chains = self._train()
+        self.seeds = self._get_seeds()
         
-    def _train(self, items):
+    def _train(self):
         result = defaultdict(list)
-        for item in items:
+        for item in self.raw_data:
             for key, value in iterslice(item, self.order):
                 result[key].append(value)
         return dict(result)
 
-    def _get_seeds(self, items):
-        return [item[:self.order] for item in items]
+    def _get_seeds(self):
+        return [item[:self.order] for item in self.raw_data]
 
 
 class UnicodeGenerator(object):
@@ -55,7 +56,7 @@ class UnicodeGenerator(object):
             if not value:
                 break
             result += value
-        return result
+        return self._gen_desc() if result in self._mdata.raw_data else result
 
     def generate(self):
         return 'U+%s %s' % (self._gen_hex(), self._gen_desc())
