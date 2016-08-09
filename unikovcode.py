@@ -41,11 +41,11 @@ class UnicodeGenerator(object):
         self._mdata = mdata
 
     def _gen_hex(self):
-        length = choice([4, 5])
-        result = [choice(hex_chars) for _ in xrange(length)]
-        replace_at = randint(0, length - 1)
-        result[replace_at] = choice(non_hex_chars)  # for lulz
-        return ''.join(result)
+        codepoint = '%04X' % randint(0, 0x10FFFF)
+        chars = list(codepoint)
+        replace_at = randint(0, len(chars) - 1)
+        chars[replace_at] = choice(non_hex_chars)  # for lulz
+        return ''.join(chars)
 
     def _gen_desc(self):
         result = choice(self._mdata.seeds)
