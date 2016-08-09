@@ -4,6 +4,7 @@ from collections import defaultdict
 from random import choice, randint
 from string import hexdigits, ascii_lowercase, ascii_uppercase
 
+data_url = 'http://unicode.org/Public/UNIDATA/UnicodeData.txt'
 data_file = 'UnicodeData.txt'
 hex_chars = ''.join(set(hexdigits) - set(ascii_lowercase))
 non_hex_chars = ''.join(set(ascii_uppercase) - set(hex_chars))
@@ -64,7 +65,7 @@ class UnicodeGenerator(object):
 
 def get_raw_data():
     if not os.path.isfile(data_file):
-        data = urllib2.urlopen('http://unicode.org/Public/UNIDATA/UnicodeData.txt')
+        data = urllib2.urlopen(data_url)
         with open(data_file, 'w') as out:
             out.write(data.read())
     return open(data_file)
