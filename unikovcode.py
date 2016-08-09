@@ -73,6 +73,7 @@ def get_raw_data():
 
 
 def get_names(record):
+    '''See http://www.unicode.org/reports/tr44/#UnicodeData.txt'''
     split = record.split(';')
     character_name = split[1]
     unicode10name = split[10]
