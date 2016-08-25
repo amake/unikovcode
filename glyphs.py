@@ -76,7 +76,9 @@ def get_generator():
 def main():
     generator = get_generator()
     for _ in xrange(10):
-        generator.generate().show()
+        result = generator.generate()
+        size = tuple([d * 3 for d in result.size])
+        result.resize(size).show()
 
 
 if __name__ == '__main__':
