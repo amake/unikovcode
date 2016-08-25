@@ -1,6 +1,7 @@
 from __future__ import print_function
 import os
 import urllib2
+import logging
 from collections import defaultdict
 from random import choice, randint
 from string import hexdigits, ascii_lowercase, ascii_uppercase
@@ -24,6 +25,9 @@ class MarkovData(object):
         self.order = order
         self.chains = self._train()
         self.seeds = self._get_seeds()
+        logging.debug('Seeds: %d' % len(self.seeds))
+        logging.debug('Chain keys: %d' % len(self.chains))
+        logging.debug('Random key: %s' % choice(self.chains.keys()))
         
     def _train(self):
         result = defaultdict(list)
@@ -52,7 +56,7 @@ class UnicodeGenerator(object):
         result = choice(self._mdata.seeds)
         order = len(result)
         while True:
-            values = self._mdata.chains.get(result[-order:])
+            values = self._mdata.chains.get(str(result[-order:]))
             if not values:
                 break
             value = choice(values)
