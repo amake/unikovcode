@@ -69,7 +69,7 @@ def get_raw_data(image):
 def get_generator():
     uimage = get_image()
     raw_data = get_raw_data(uimage)
-    mdata = MarkovData(raw_data, order=16)
+    mdata = MarkovData(raw_data, order=width)
     return GlyphGenerator(mdata, uimage.mode)
 
 
