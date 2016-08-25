@@ -33,7 +33,7 @@ class MarkovData(object):
         result = defaultdict(list)
         for item in self.raw_data:
             for key, value in iterslice(item, self.order):
-                result[key].append(value)
+                result[str(key)].append(value)
         return dict(result)
 
     def _get_seeds(self):
