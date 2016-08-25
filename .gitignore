@@ -4,3 +4,4 @@ credentials.json
 *.egg-info
 *.zip
 UnicodeData.txt
+*.bmp
