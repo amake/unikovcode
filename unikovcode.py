@@ -111,4 +111,7 @@ def main():
 
 
 if __name__ == '__main__':
+    import sys
+    if '-v' in sys.argv:
+        logging.getLogger().setLevel(logging.DEBUG)
     main()
