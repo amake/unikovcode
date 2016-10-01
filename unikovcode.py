@@ -1,5 +1,6 @@
 from __future__ import print_function
 import os
+import re
 import urllib2
 import logging
 from collections import defaultdict
@@ -37,7 +38,8 @@ class MarkovData(object):
         return dict(result)
 
     def _get_seeds(self):
-        return [item[:self.order] for item in self.raw_data]
+        regex = re.compile(r'(?:^|(?<=\s))(.{%d})' % self.order)
+        return [m.group(1) for item in self.raw_data for m in regex.finditer(item)]
 
 
 class UnicodeGenerator(object):
