@@ -29,7 +29,7 @@ class MarkovData(object):
         logging.debug('Seeds: %d' % len(self.seeds))
         logging.debug('Chain keys: %d' % len(self.chains))
         logging.debug('Random key: %s' % choice(self.chains.keys()))
-        
+
     def _train(self):
         result = defaultdict(list)
         for item in self.raw_data:
@@ -109,7 +109,7 @@ def get_generator():
 def main():
     generator = get_generator()
     for _ in xrange(10):
-        print(generator.generate())
+        print(generator.generate().encode('utf-8'))
 
 
 if __name__ == '__main__':
