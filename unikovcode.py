@@ -1,14 +1,12 @@
 from __future__ import print_function
 import os
 import re
-import urllib2
 import logging
 from collections import defaultdict
 from random import choice, randint
 from string import hexdigits, ascii_lowercase, ascii_uppercase
 
-data_url = 'http://unicode.org/Public/UNIDATA/UnicodeData.txt'
-data_file = 'UnicodeData.txt'
+data_file = 'vendor/UnicodeData.txt'
 hex_chars = ''.join(set(hexdigits) - set(ascii_lowercase))
 non_hex_chars = ''.join(set(ascii_uppercase) - set(hex_chars))
 
@@ -71,14 +69,6 @@ class UnicodeGenerator(object):
         return u'\uFFFD U+%s %s' % (self._gen_hex(), self._gen_desc())
 
 
-def get_raw_data():
-    if not os.path.isfile(data_file):
-        data = urllib2.urlopen(data_url)
-        with open(data_file, 'w') as out:
-            out.write(data.read())
-    return open(data_file)
-
-
 def get_names(record):
     '''See http://www.unicode.org/reports/tr44/#UnicodeData.txt'''
     split = record.split(';')
@@ -91,7 +81,7 @@ def get_names(record):
 
 
 def get_codepoint_names():
-    with get_raw_data() as in_data:
+    with open(data_file) as in_data:
         cp_names = [name for line in in_data for name in get_names(line)]
     return [name for name in cp_names if not name.startswith('<')]
 

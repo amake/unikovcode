@@ -3,5 +3,5 @@ credentials.json
 *.pyc
 *.egg-info
 *.zip
-UnicodeData.txt
+/vendor
 *.bmp
