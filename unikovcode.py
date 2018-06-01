@@ -12,7 +12,7 @@ non_hex_chars = ''.join(set(ascii_uppercase) - set(hex_chars))
 
 
 def iterslice(items, size):
-    for i in xrange(0, len(items) - size + 1):
+    for i in range(0, len(items) - size + 1):
         slse = items[i:i + size]
         trailing = items[i + size] if i + size < len(items) else None
         yield slse, trailing
@@ -26,7 +26,7 @@ class MarkovData(object):
         self.seeds = self._get_seeds()
         logging.debug('Seeds: %d' % len(self.seeds))
         logging.debug('Chain keys: %d' % len(self.chains))
-        logging.debug('Random key: %s' % choice(self.chains.keys()))
+        logging.debug('Random key: %s' % choice(list(self.chains.keys())))
 
     def _train(self):
         result = defaultdict(list)
@@ -66,7 +66,7 @@ class UnicodeGenerator(object):
         return self._gen_desc() if result in self._mdata.raw_data else result
 
     def generate(self):
-        return u'\uFFFD U+%s %s' % (self._gen_hex(), self._gen_desc())
+        return '\uFFFD U+%s %s' % (self._gen_hex(), self._gen_desc())
 
 
 def get_names(record):
@@ -99,8 +99,8 @@ def get_generator():
 
 def main():
     generator = get_generator()
-    for _ in xrange(10):
-        print(generator.generate().encode('utf-8'))
+    for _ in range(10):
+        print(generator.generate())
 
 
 if __name__ == '__main__':
