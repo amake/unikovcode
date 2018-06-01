@@ -16,7 +16,7 @@ non_hex_chars = ''.join(set(ascii_uppercase) - set(hex_chars))
 def iterslice(items, size):
     for i in xrange(0, len(items) - size + 1):
         slse = items[i:i + size]
-        trailing =  items[i + size] if i + size < len(items) else None
+        trailing = items[i + size] if i + size < len(items) else None
         yield slse, trailing
 
 
@@ -88,6 +88,7 @@ def get_names(record):
     if unicode10name:
         result.append(unicode10name)
     return result
+
 
 def get_codepoint_names():
     with get_raw_data() as in_data:

@@ -22,12 +22,14 @@ auth.set_access_token(credentials['AccessToken'],
 
 api = tweepy.API(auth)
 
+
 def get_tweetable_codepoint():
     generator = unikovcode.get_generator()
     while True:
         codepoint = generator.generate()
         if len(codepoint) <= 140:
             return codepoint
+
 
 def do_tweet(event, context):
     text = get_tweetable_codepoint()

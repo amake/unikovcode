@@ -4,9 +4,11 @@ import tweepy
 import json
 import subprocess
 
+
 def write_creds(creds):
     with open(creds_file, 'w') as outfile:
         json.dump(creds, outfile)
+
 
 creds_file = 'credentials.json'
 
@@ -34,7 +36,8 @@ auth_url = auth.get_authorization_url()
 print('Go to:', auth_url)
 
 verifier = raw_input('PIN: ')
-credentials['AccessToken'], credentials['AccessSecret'] = auth.get_access_token(verifier)
+credentials['AccessToken'], credentials['AccessSecret'] = auth.get_access_token(
+    verifier)
 
 write_creds(credentials)
 

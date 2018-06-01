@@ -45,7 +45,7 @@ class GlyphGenerator(object):
         while len(result) < 256:
             values = self._mdata.chains.get(str(result[-order:]))
             value = choice([v for v in values if v is not None]) \
-                    if values else None
+                if values else None
             if value is None:
                 value = choice([0, 0xff])
             result.append(value)
