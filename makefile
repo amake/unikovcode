@@ -22,6 +22,8 @@ cleanAll:
 
 update: | .env
 	.env/bin/pip install --upgrade -e .
+	rm -rf vendor
+	$(MAKE) $(unicode-data)
 
 $(payload): *.py credentials.json $(unicode-data) | .env dist
 	rm -rf $(@)
