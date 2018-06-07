@@ -2,6 +2,7 @@ SHELL := /bin/bash -O extglob
 unicode-data := vendor/UnicodeData.txt
 payload := dist/lambda-deploy.zip
 lambda-name := UnikovcodeTwitterBot
+aws-args ?=
 
 .PHONY = zip clean cleanAll update deploy test
 
@@ -38,7 +39,7 @@ $(unicode-data): | vendor
 	curl -o $(@) http://unicode.org/Public/UNIDATA/$(@F)
 
 deploy: $(payload)
-	aws lambda update-function-code \
+	aws $(aws-args) lambda update-function-code \
 		--function-name $(lambda-name) \
 		--zip-file fileb://$$(pwd)/$(<)
 
