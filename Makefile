@@ -4,7 +4,7 @@ payload := dist/lambda-deploy.zip
 lambda-name := UnikovcodeTwitterBot
 aws-args ?=
 
-.PHONY = zip clean cleanAll update deploy test
+.PHONY = zip clean cleanAll update deploy invoke test
 
 zip: $(payload)
 
@@ -29,8 +29,8 @@ update: | .env
 $(payload): *.py credentials.json $(unicode-data) | .env dist
 	rm -rf $(@)
 	zip $(@) $(^) -x \*.pyc
-	root=$$(pwd); cd .env/lib/python3.6/site-packages; \
-		zip -r $$root/$(@) ./!(pip*|wheel*|setuptools*|easy_install*) -x \*.pyc
+	cd .env/lib/python3.6/site-packages; \
+		zip -r $(PWD)/$(@) ./!(pip*|wheel*|setuptools*|easy_install*) -x \*.pyc
 
 credentials.json:
 	.env/bin/python auth_setup.py
@@ -42,6 +42,11 @@ deploy: $(payload)
 	aws $(aws-args) lambda update-function-code \
 		--function-name $(lambda-name) \
 		--zip-file fileb://$$(pwd)/$(<)
+
+invoke:
+	aws $(aws-args) lambda invoke \
+		--function-name $(lambda-name) \
+		/dev/null
 
 test: | .env $(unicode-data)
 	.env/bin/python unikovcode.py
