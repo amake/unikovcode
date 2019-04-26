@@ -1,12 +1,12 @@
 SHELL := /bin/bash -O extglob
-unicode-data := vendor/UnicodeData.txt
-payload := dist/lambda-deploy.zip
-lambda-name := UnikovcodeTwitterBot
-aws-args ?=
+UNICODE_DATA := vendor/UnicodeData.txt
+PAYLOAD := dist/lambda-deploy.zip
+LAMBDA_NAME := UnikovcodeTwitterBot
+AWS_ARGS ?=
 
 .PHONY = zip clean cleanAll update deploy invoke test
 
-zip: $(payload)
+zip: $(PAYLOAD)
 
 .env:
 	virtualenv .env
@@ -24,9 +24,9 @@ cleanAll:
 update: | .env
 	.env/bin/pip install --upgrade -e .
 	rm -rf vendor
-	$(MAKE) $(unicode-data)
+	$(MAKE) $(UNICODE_DATA)
 
-$(payload): *.py credentials.json $(unicode-data) | .env dist
+$(PAYLOAD): *.py credentials.json $(UNICODE_DATA) | .env dist
 	rm -rf $(@)
 	zip $(@) $(^) -x \*.pyc
 	cd .env/lib/python3.6/site-packages; \
@@ -35,18 +35,18 @@ $(payload): *.py credentials.json $(unicode-data) | .env dist
 credentials.json:
 	.env/bin/python auth_setup.py
 
-$(unicode-data): | vendor
+$(UNICODE_DATA): | vendor
 	curl -o $(@) http://unicode.org/Public/UNIDATA/$(@F)
 
-deploy: $(payload)
-	aws $(aws-args) lambda update-function-code \
-		--function-name $(lambda-name) \
+deploy: $(PAYLOAD)
+	aws $(AWS_ARGS) lambda update-function-code \
+		--function-name $(LAMBDA_NAME) \
 		--zip-file fileb://$$(pwd)/$(<)
 
 invoke:
-	aws $(aws-args) lambda invoke \
-		--function-name $(lambda-name) \
+	aws $(AWS_ARGS) lambda invoke \
+		--function-name $(LAMBDA_NAME) \
 		/dev/null
 
-test: | .env $(unicode-data)
+test: | .env $(UNICODE_DATA)
 	.env/bin/python unikovcode.py
