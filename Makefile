@@ -4,8 +4,7 @@ PAYLOAD := dist/lambda-deploy.zip
 LAMBDA_NAME := UnikovcodeTwitterBot
 AWS_ARGS ?=
 
-.PHONY = zip clean cleanAll update deploy invoke test
-
+.PHONY: zip
 zip: $(PAYLOAD)
 
 .env:
@@ -15,12 +14,15 @@ zip: $(PAYLOAD)
 dist vendor:
 	mkdir -p $(@)
 
+.PHONY: clean
 clean:
 	rm -rf dist
 
+.PHONY: cleanAll
 cleanAll:
 	rm -rf dist vendor
 
+.PHONY: update
 update: | .env
 	.env/bin/pip install --upgrade -e .
 	rm -rf vendor
@@ -38,15 +40,18 @@ credentials.json:
 $(UNICODE_DATA): | vendor
 	curl -o $(@) http://unicode.org/Public/UNIDATA/$(@F)
 
+.PHONY: deploy
 deploy: $(PAYLOAD)
 	aws $(AWS_ARGS) lambda update-function-code \
 		--function-name $(LAMBDA_NAME) \
 		--zip-file fileb://$$(pwd)/$(<)
 
+.PHONY: invoke
 invoke:
 	aws $(AWS_ARGS) lambda invoke \
 		--function-name $(LAMBDA_NAME) \
 		/dev/null
 
+.PHONY: test
 test: | .env $(UNICODE_DATA)
 	.env/bin/python unikovcode.py
