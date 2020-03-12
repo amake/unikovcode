@@ -15,14 +15,12 @@ dist vendor:
 	mkdir -p $(@)
 
 .PHONY: clean
+clean: ## Remove generated data
 clean:
 	rm -rf dist
 
-.PHONY: cleanAll
-cleanAll:
-	rm -rf dist vendor
-
 .PHONY: update
+update: ## Update dependencies and vendor data
 update: | .env
 	.env/bin/pip install --upgrade -e .
 	rm -rf vendor
@@ -41,17 +39,28 @@ $(UNICODE_DATA): | vendor
 	curl -o $(@) http://unicode.org/Public/UNIDATA/$(@F)
 
 .PHONY: deploy
+deploy: ## Deploy lambda payload to AWS
 deploy: $(PAYLOAD)
 	aws $(AWS_ARGS) lambda update-function-code \
 		--function-name $(LAMBDA_NAME) \
 		--zip-file fileb://$$(pwd)/$(<)
 
 .PHONY: invoke
+invoke: ## Invoke lambda on AWS
 invoke:
 	aws $(AWS_ARGS) lambda invoke \
 		--function-name $(LAMBDA_NAME) \
 		/dev/null
 
 .PHONY: test
+test: ## Run local test
 test: | .env $(UNICODE_DATA)
 	.env/bin/python unikovcode.py
+
+.PHONY: help
+help: ## Show this help text
+	$(info usage: make [target])
+	$(info )
+	$(info Available targets:)
+	@awk -F ':.*?## *' '/^[^\t].+?:.*?##/ \
+         {printf "  %-24s %s\n", $$1, $$2}' $(MAKEFILE_LIST)
