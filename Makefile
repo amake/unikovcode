@@ -24,7 +24,7 @@ update: ## Update dependencies and vendor data
 update: | .env
 	.env/bin/pip install --upgrade -e .
 	rm -rf vendor
-	$(MAKE) $(UNICODE_DATA)
+	$(MAKE) assets
 
 $(PAYLOAD): *.py credentials.json $(UNICODE_DATA) | .env dist
 	rm -rf $(@)
@@ -34,6 +34,10 @@ $(PAYLOAD): *.py credentials.json $(UNICODE_DATA) | .env dist
 
 credentials.json:
 	.env/bin/python auth_setup.py
+
+.PHONY: assets
+assets: ## Prepare assets
+assets: $(UNICODE_DATA)
 
 $(UNICODE_DATA): | vendor
 	curl -o $(@) http://unicode.org/Public/UNIDATA/$(@F)
