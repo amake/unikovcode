@@ -22,7 +22,8 @@ clean:
 .PHONY: update
 update: ## Update dependencies and vendor data
 update: | .env
-	.env/bin/pip install --upgrade -e .
+	.env/bin/pip install --upgrade pip
+	.env/bin/pip install --upgrade --upgrade-strategy eager -e .
 	rm -rf vendor
 	$(MAKE) assets
 
