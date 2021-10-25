@@ -1,4 +1,5 @@
 SHELL := /bin/bash -O extglob
+VENV := .env
 PYTHON_VERSION := 3.9
 UNICODE_VERSION := 14.0.0
 UNICODE_DATA := vendor/UnicodeData.txt
@@ -9,7 +10,7 @@ AWS_ARGS ?=
 .PHONY: zip
 zip: $(PAYLOAD)
 
-.env:
+$(VENV):
 	virtualenv --python $(PYTHON_VERSION) $(@)
 	$(@)/bin/pip install -e .
 
@@ -23,20 +24,20 @@ clean:
 
 .PHONY: update
 update: ## Update dependencies and vendor data
-update: | .env
-	.env/bin/pip install --upgrade pip
-	.env/bin/pip install --upgrade --upgrade-strategy eager -e .
+update: | $(VENV)
+	$(VENV)/bin/pip install --upgrade pip
+	$(VENV)/bin/pip install --upgrade --upgrade-strategy eager -e .
 	rm -rf vendor
 	$(MAKE) assets
 
-$(PAYLOAD): *.py credentials.json $(UNICODE_DATA) | .env dist
+$(PAYLOAD): *.py credentials.json $(UNICODE_DATA) | $(VENV) dist
 	rm -rf $(@)
 	zip $(@) $(^) -x \*.pyc
-	cd .env/lib/python$(PYTHON_VERSION)/site-packages; \
+	cd $(VENV)/lib/python$(PYTHON_VERSION)/site-packages; \
 		zip -r $(PWD)/$(@) ./!(pip*|wheel*|setuptools*|easy_install*) -x \*.pyc
 
 credentials.json:
-	.env/bin/python auth_setup.py
+	$(VENV)/bin/python auth_setup.py
 
 .PHONY: assets
 assets: ## Prepare assets
@@ -61,8 +62,8 @@ invoke:
 
 .PHONY: test
 test: ## Run local test
-test: | .env $(UNICODE_DATA)
-	.env/bin/python unikovcode.py
+test: | $(VENV) $(UNICODE_DATA)
+	$(VENV)/bin/python unikovcode.py
 
 .PHONY: help
 help: ## Show this help text
