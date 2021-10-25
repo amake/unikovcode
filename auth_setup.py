@@ -26,6 +26,8 @@ if os.path.isfile(creds_file):
         print('Nothing to do.')
         exit(0)
 
+
+print('Input credentials from https://apps.twitter.com/')
 for item in ['ConsumerKey', 'ConsumerSecret']:
     if item not in credentials:
         credentials[item] = input('%s: ' % item)
@@ -37,7 +39,8 @@ auth = tweepy.OAuthHandler(credentials['ConsumerKey'],
 
 auth_url = auth.get_authorization_url()
 
-print('Go to:', auth_url)
+print('Go here to get PIN:')
+print(auth_url)
 
 verifier = input('PIN: ')
 credentials['AccessToken'], credentials['AccessSecret'] = auth.get_access_token(
