@@ -36,7 +36,7 @@ $(PAYLOAD): *.py credentials.json $(UNICODE_DATA) | $(VENV) dist
 	cd $(VENV)/lib/python$(PYTHON_VERSION)/site-packages; \
 		zip -r $(PWD)/$(@) ./!(pip*|wheel*|setuptools*|easy_install*) -x \*.pyc
 
-credentials.json:
+credentials.json: | $(VENV)
 	$(VENV)/bin/python auth_setup.py
 
 .PHONY: assets
