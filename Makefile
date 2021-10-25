@@ -1,5 +1,6 @@
 SHELL := /bin/bash -O extglob
 PYTHON_VERSION := 3.9
+UNICODE_VERSION := 14.0.0
 UNICODE_DATA := vendor/UnicodeData.txt
 PAYLOAD := dist/lambda-deploy.zip
 LAMBDA_NAME := UnikovcodeTwitterBot
@@ -42,7 +43,7 @@ assets: ## Prepare assets
 assets: $(UNICODE_DATA)
 
 $(UNICODE_DATA): | vendor
-	curl -o $(@) http://unicode.org/Public/UNIDATA/$(@F)
+	curl -o $(@) https://unicode.org/Public/$(UNICODE_VERSION)/ucd/$(@F)
 
 .PHONY: deploy
 deploy: ## Deploy lambda payload to AWS
