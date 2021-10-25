@@ -1,4 +1,5 @@
 SHELL := /bin/bash -O extglob
+PYTHON_VERSION := 3.9
 UNICODE_DATA := vendor/UnicodeData.txt
 PAYLOAD := dist/lambda-deploy.zip
 LAMBDA_NAME := UnikovcodeTwitterBot
@@ -8,8 +9,8 @@ AWS_ARGS ?=
 zip: $(PAYLOAD)
 
 .env:
-	virtualenv .env
-	.env/bin/pip install -e .
+	virtualenv --python $(PYTHON_VERSION) $(@)
+	$(@)/bin/pip install -e .
 
 dist vendor:
 	mkdir -p $(@)
@@ -30,7 +31,7 @@ update: | .env
 $(PAYLOAD): *.py credentials.json $(UNICODE_DATA) | .env dist
 	rm -rf $(@)
 	zip $(@) $(^) -x \*.pyc
-	cd .env/lib/python3.6/site-packages; \
+	cd .env/lib/python$(PYTHON_VERSION)/site-packages; \
 		zip -r $(PWD)/$(@) ./!(pip*|wheel*|setuptools*|easy_install*) -x \*.pyc
 
 credentials.json:
