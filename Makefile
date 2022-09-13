@@ -1,7 +1,7 @@
 SHELL := /bin/bash -O extglob
 VENV := .env
 PYTHON_VERSION := 3.9
-UNICODE_VERSION := 14.0.0
+UNICODE_VERSION := 15.0.0
 UNICODE_DATA := vendor/UnicodeData.txt
 PAYLOAD := dist/lambda-deploy.zip
 LAMBDA_NAME := UnikovcodeTwitterBot
